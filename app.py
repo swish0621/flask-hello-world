@@ -4,7 +4,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def hello_world():
-    return 'Hello, World From Nicholas Swisher in 3308.'
+    return 'Hello, World from Nicholas Swisher in 3308.'
 
 @app.route('/db_test')
 def db_test(): 
@@ -23,7 +23,38 @@ def create_db():
                 City varchar(225),
                 Name varchar(225),
                 Number int
-                ''')
+                );
+    ''')
     conn.commit()
     conn.close()
-    return "Database created successfully!"
+    return "Basketball table successfully created!"
+
+@app.route('/db_insert')
+def db_insert():
+    conn = psycopg.connect("postgresql://lab10_database_l65b_user:6u5YCsT039jmaSE0knSRY6002qOUTPAP@dpg-d24e42ngi27c73dgfulg-a/lab10_database_l65b")
+    cur = conn.cursor()
+    cur.execute('''
+                INSERT INTO Basketball (First, Last, City, Name, Number)
+                Values
+                ('Jayson', 'Tatum', 'Boston', 'Celtics', 0),
+                ('Stephen', 'Curry', 'San Francisco', 'Warriors', 30),
+                ('Nikola', 'Jokic', 'Denver', 'Nuggets', 15),
+                ('Kawhi', 'Leonard', 'Los Angeles', 'Clippers', 2);
+    ''')
+
+@app.route('/db_select')
+def db_select():
+    conn = psycopg.connect("postgresql://lab10_database_l65b_user:6u5YCsT039jmaSE0knSRY6002qOUTPAP@dpg-d24e42ngi27c73dgfulg-a/lab10_database_l65b")
+    cur = conn.cursor()
+    cur.execute('SELECT * FROM Basketball;')
+    records = cur.fetchall()
+    conn.close()
+    response_string=""
+    response_string+="<table>"
+    for player in records:
+        response_string+="<tr>"
+        for info in player:
+            response_string+="<td>{}</td>".format(info)
+        response_string+="</tr>"
+    response_string+="</table>"
+    return response_string
