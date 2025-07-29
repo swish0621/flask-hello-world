@@ -10,7 +10,7 @@ def hello_world():
 def db_test(): 
     conn = psycopg.connect("postgresql://lab10_database_l65b_user:6u5YCsT039jmaSE0knSRY6002qOUTPAP@dpg-d24e42ngi27c73dgfulg-a/lab10_database_l65b")
     conn.close()
-    return "Database connection successful!"
+    return "Database connection successful"
 
 @app.route('/create_db')
 def create_db():
@@ -27,7 +27,7 @@ def create_db():
     ''')
     conn.commit()
     conn.close()
-    return "Basketball table successfully created!"
+    return "Basketball table successfully created"
 
 @app.route('/db_insert')
 def db_insert():
@@ -41,6 +41,9 @@ def db_insert():
                 ('Nikola', 'Jokic', 'Denver', 'Nuggets', 15),
                 ('Kawhi', 'Leonard', 'Los Angeles', 'Clippers', 2);
     ''')
+    conn.commit()
+    conn.close()
+    return "Basketball table succcessfully poplated"
 
 @app.route('/db_select')
 def db_select():
@@ -58,3 +61,14 @@ def db_select():
         response_string+="</tr>"
     response_string+="</table>"
     return response_string
+
+@app.route('/db_drop')
+def db_drop():
+    conn = psycopg.connect("postgresql://lab10_database_l65b_user:6u5YCsT039jmaSE0knSRY6002qOUTPAP@dpg-d24e42ngi27c73dgfulg-a/lab10_database_l65b")
+    cur = conn.cursor()
+    cur.execute('''
+                DROP TABLE Basketball;
+                ''')
+    conn.commit()
+    conn.close()
+    return "Basketball table successfully dropped"
