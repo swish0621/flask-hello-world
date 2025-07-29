@@ -43,7 +43,7 @@ def db_insert():
     ''')
     conn.commit()
     conn.close()
-    return "Basketball table succcessfully poplated"
+    return "Basketball table succcessfully populated"
 
 @app.route('/db_select')
 def db_select():
